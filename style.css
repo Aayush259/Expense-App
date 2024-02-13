@@ -1,0 +1,83 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #ffffff;
+}
+
+header {
+    padding: 1rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: #000001;
+    color: aliceblue;
+}
+
+.input-container {
+    background-color: rgba(209, 217, 224, 0.514);
+    margin-top: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    max-width: 450px;
+    height: 250px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3vmin;
+}
+
+input {
+    height: 42px;
+    width: 43vmin;
+    border-radius: 0 7px 7px 0;
+    border: 1px solid #9a9a9c;
+    font-size: 1.2rem;
+    padding: 0.6rem;
+}
+
+.input-with-text {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.txt-before-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #9a9a9c;
+    border-right-width: 0;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 1.3rem;
+    width: 40px;
+    height: 42px;
+    background-color: #ffffff;
+    user-select: none;
+}
+
+.spent-on {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-button {
+    margin-top: 1rem;
+}
+
+.add-button button {
+    padding: 0.2rem 0.5rem;
+    font-size: 1.3rem;
+    border: 1px solid #9a9a9c;
+    border-radius: 7px;
+    cursor: pointer;
+}
