@@ -156,8 +156,9 @@ input:focus, .add-button button:focus {
 }
 
 footer {
-    position: relative;
+    position: absolute;
     bottom: 0;
+    width: 100%;
     background-color: #000001;
     color: aliceblue;
     padding: 1.5rem;
