@@ -154,3 +154,33 @@ input:focus, .add-button button:focus {
     outline: 0;
     box-shadow: 0 0 0.2rem 0.2rem rgb(255, 0, 0);
 }
+
+footer {
+    background-color: #000001;
+    color: aliceblue;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.author {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3rem;
+    gap: 9px;
+}
+
+.author > p {
+    position: relative;
+    top: -4px;
+}
+
+.author > img {
+    border-radius: 50%;
+}
