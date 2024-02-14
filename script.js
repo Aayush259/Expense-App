@@ -58,18 +58,20 @@ const AddToHistory = (amount, spentOn) => {
 const AddFunction = () => {
 
     // Getting Amouht Spent
-    const AmountSpent = document.getElementById('amount-spent').value;
+    const AmountSpent = document.getElementById('amount-spent');
 
     // Getting SpentOn
-    const SpentOn = document.getElementById('spent-on').value;
+    const SpentOn = document.getElementById('spent-on');
 
     // If any one of the input elements is empty then do nothing otherwise call AddTotal and AddToHistory functions
-    if (AmountSpent === '' || SpentOn === '') {
+    if (AmountSpent.value === '' || SpentOn.value === '') {
         return;
     }
     else {
-        AddTotal(AmountSpent);
-        AddToHistory(AmountSpent, SpentOn);
+        AddTotal(AmountSpent.value);
+        AddToHistory(AmountSpent.value, SpentOn.value);
+        AmountSpent.value = '';
+        SpentOn.value = '';
     }
 
 };
