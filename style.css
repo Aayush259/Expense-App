@@ -45,6 +45,11 @@ input {
     padding: 0.6rem;
 }
 
+input:focus, .add-button button:focus {
+    outline: 0;
+    box-shadow: 0 0 0.2rem 0.2rem rgb(0, 153, 255);
+}
+
 .input-with-text {
     display: flex;
     flex-direction: row;
@@ -143,4 +148,9 @@ input {
     border: 1px solid #ff0000;
     border-radius: 5px;
     cursor: pointer;
+}
+
+#delete-button > button:focus {
+    outline: 0;
+    box-shadow: 0 0 0.2rem 0.2rem rgb(255, 0, 0);
 }
