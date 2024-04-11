@@ -1,6 +1,5 @@
 // Getting DOM elements
 const AddButton = document.getElementById('add-button');
-
 const SpentList = document.querySelector('.spent-list');
 
 /*
@@ -19,7 +18,6 @@ const AddTotal = (amount) => {
 
     // Updating the total amount value and display it on screen
     TotalAmount.textContent = amount + PreviousAmount;
-
 };
 
 /*
@@ -31,24 +29,18 @@ const AddToHistory = (amount, spentOn) => {
     const SpentList = document.querySelector('.spent-list');
 
     // Dynamically generating HTML code and updating it to DOM
-    SpentList.innerHTML += `<div class="list-item">
-    <p>${spentOn}</p>
-    <div>
-
-        <p class="amount">${amount}</p>
-
-        <div id="delete-button">
-
-            <button class="delete">
-
-                <img src="./images/delete.png" alt="Delete Button" height="23">
-
-            </button>
-
+    SpentList.innerHTML += `
+    <div class="list-item">
+        <p>${spentOn}</p>
+        <div>
+            <p class="amount">${amount}</p>
+            <div id="delete-button">
+                <button class="delete">
+                    <img src="./images/delete.png" alt="Delete Button" height="23">
+                </button>
+            </div>
         </div>
-
-    </div>
-</div>`
+    </div>`
 
 };
 
@@ -73,7 +65,6 @@ const AddFunction = () => {
         AmountSpent.value = '';
         SpentOn.value = '';
     }
-
 };
 
 // Adding event listener to add button to add list item and calculates total
@@ -89,15 +80,9 @@ SpentList.addEventListener('click', (event) => {
     if (event.target.classList.contains('delete') || event.target.parentElement.classList.contains('delete')) {
 
         const ReducedAmount = parseInt(event.target.closest('.list-item').querySelector('.amount').textContent);
-
         const TotalAmount = document.getElementById('total');
-
         const CurrentAmount = parseInt(TotalAmount.textContent);
-
         TotalAmount.textContent = CurrentAmount - ReducedAmount;
-
         event.target.closest('.list-item').remove();
-
     }
-
 });
