@@ -2,6 +2,8 @@
 const AddButton = document.getElementById('add-button');
 const SpentList = document.querySelector('.spent-list');
 
+let currentId = 0;
+
 /*
     The following function takes the amount as argument and adds to the total amount and display it.
 */
@@ -18,6 +20,8 @@ const AddTotal = (amount) => {
 
     // Updating the total amount value and display it on screen
     TotalAmount.textContent = amount + PreviousAmount;
+
+    localStorage.setItem('TotalAmount', `${TotalAmount.textContent}`);
 };
 
 /*
@@ -60,12 +64,44 @@ const AddFunction = () => {
         return;
     }
     else {
+        localStorage.setItem(`amountSpent${currentId}`, `${AmountSpent.value}`);
+        localStorage.setItem(`spentOn${currentId}`, `${SpentOn.value}`);
+
+        localStorage.setItem('currentId', `${++currentId}`);
         AddTotal(AmountSpent.value);
         AddToHistory(AmountSpent.value, SpentOn.value);
         AmountSpent.value = '';
         SpentOn.value = '';
     }
 };
+
+
+if (localStorage.getItem('currentId')) {
+    currentId = localStorage.getItem('currentId');
+
+    const totalAmount = localStorage.getItem('TotalAmount');
+
+    document.getElementById('total').innerText = totalAmount;
+
+    let i = 0;
+
+    while (true) {
+
+        const AmountSpent = localStorage.getItem(`amountSpent${i}`);
+        const SpentOn = localStorage.getItem(`spentOn${i}`);
+
+        if (AmountSpent === null) {
+            // Do Nothing.
+        } else {
+            AddToHistory(AmountSpent, SpentOn);
+        }
+        if (i >= parseInt(currentId)) {
+            break;
+        }
+        
+        i++;
+    }
+}
 
 // Adding event listener to add button to add list item and calculates total
 AddButton.addEventListener('click', AddFunction);
