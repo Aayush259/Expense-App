@@ -144,8 +144,10 @@ SpentList.addEventListener('click', (event) => {
         localStorage.setItem('TotalAmount', `${CurrentAmount - ReducedAmount}`);    // Updating the total amount in local storage.
 
         // Removing the amountSpent and spentOn values of the element which is to be deleted from local storage.
-        localStorage.removeItem(`amountSpent${RemovingChildIndex}`);
-        localStorage.removeItem(`spentOn${RemovingChildIndex}`);
+        if (RemovingChildIndex === 0) {
+            localStorage.removeItem(`amountSpent${RemovingChildIndex}`);
+            localStorage.removeItem(`spentOn${RemovingChildIndex}`);
+        }
 
         // Setting the spentOn and amount keys in localStorage object to the previous index from the deleted element index so that the flow of the array does not break.
         for (let i = RemovingChildIndex; i < currentId.length; i++) {
