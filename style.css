@@ -189,3 +189,7 @@ footer{
 .author > img{
     border-radius:50%;
 }
+
+.none-display{
+    display:none;
+}

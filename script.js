@@ -1,5 +1,6 @@
 // Getting DOM elements
 const AddButton = document.getElementById('add-button');
+const ClearButton = document.getElementById('clear-button');
 const SpentList = document.querySelector('.spent-list');
 
 // Initialzing currentId array with its first index set to `0`.
@@ -83,6 +84,9 @@ const AddFunction = () => {
         AddToHistory(AmountSpent.value, SpentOn.value);
         AmountSpent.value = '';
         SpentOn.value = '';
+
+        // Displaying clear button.
+        ClearButton.classList.remove('none-display');
     }
 };
 
@@ -102,6 +106,9 @@ const GetChildIndex = (parent, child) => {
     Display the previous added values and total amount.
 */
 if (localStorage.getItem('currentId')) {
+
+    // Displaying clear button.
+    ClearButton.classList.remove('none-display');
 
     // Getting currentId from local storage.
     currentIdValue = localStorage.getItem('currentId');
@@ -123,6 +130,19 @@ if (localStorage.getItem('currentId')) {
 
 // Adding event listener to add button to add list item and calculates total
 AddButton.addEventListener('click', AddFunction);
+
+// Adding event listener to clear button to reset the app.
+ClearButton.addEventListener('click', () => {
+
+    // Hiding clear button.
+    ClearButton.classList.add('none-display');
+
+    // Clearing local storage.
+    localStorage.clear();
+
+    // Reloading the page.
+    location.reload();
+})
 
 /*
     Adding Event Listener to the SpentList.
