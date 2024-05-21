@@ -1,10 +1,60 @@
 // Getting DOM elements
 const AddButton = document.getElementById('add-button');
-const ClearButton = document.getElementById('clear-button');
 const SpentList = document.querySelector('.spent-list');
 
-// Initialzing currentId array with its first index set to `0`.
-let currentId = [0];
+// Declaring expenseData and totalExpenseAmount variables which will keep track of expense data and total expense amount.
+let expenseData;
+let totalExpenseAmount;
+
+// Getting expense data from local storage if it is present, else set it to empty array and set totalExpenseAmount to 0.
+try {
+    expenseData = JSON.parse(localStorage.getItem("expenseData")) || [];
+    totalExpenseAmount = localStorage.getItem("totalExpense") || 0;
+} catch (error) {
+    expenseData = [];
+    totalExpenseAmount = 0;
+    console.log(error);
+}
+
+localStorage.setItem("expenseData", JSON.stringify(expenseData));
+localStorage.setItem("totalExpense", totalExpenseAmount);
+
+// This function returns the index of that object in expenseData whose id matches with the id passed as argument.
+const GetExpenseDataIndex = (id) => {
+    return expenseData.findIndex(data => data.id === id);
+};
+
+/*
+    This function removes the item from screen and local storage.
+*/
+const RemoveItem = (expenseId) => {
+    // Getting expense list item with its id.
+    const ExpenseListItem = document.getElementById(expenseId);
+
+    // Getting total amount element.
+    const TotalAmountElement = document.getElementById('total');
+
+    // Getting the amount which has to be reduced from total expense amount
+    const AmountToReduce = parseInt(ExpenseListItem.querySelector('.amount').textContent);
+
+    // Updating totalExpense Amount
+    totalExpenseAmount -= AmountToReduce;
+
+    // Updating the totalExpenseAmount on screen and local storage.
+    TotalAmountElement.textContent = totalExpenseAmount;
+    localStorage.setItem("totalExpense", totalExpenseAmount);
+
+    // Removing the list item from screen and localStorage.
+    ExpenseListItem.remove();
+
+    const index = GetExpenseDataIndex(expenseId);
+    if (index !== -1) {
+        expenseData.splice(index, 1);
+        localStorage.setItem("expenseData", JSON.stringify(expenseData));
+    } else {
+        console.log("Item not found");
+    }
+};
 
 /*
     The following function takes the amount as argument and adds to the total amount and display it.
@@ -23,36 +73,32 @@ const AddTotal = (amount) => {
     // Updating the total amount value and display it on screen
     TotalAmount.textContent = amount + PreviousAmount;
 
-    // Updating the total amount value in local storage.
-    localStorage.setItem('TotalAmount', `${TotalAmount.textContent}`);
+    // Return updated total amount.
+    return TotalAmount.textContent;
 };
 
 /*
     The following funciton takes amount and spentOn as argument and create a item list dynamically and add it to DOM.
 */
-const AddToHistory = (amount, spentOn) => {
-
-    // If the amount and spentOn are null then do nothing and end the function by doing nothing.
-    if (amount === null || spentOn === null) {
-        return;
-    }
+const AddToHistory = (amount, spentOn, id) => {
 
     // Getting spent list from DOM
     const SpentList = document.querySelector('.spent-list');
 
     // Dynamically generating HTML code and updating it to DOM
     SpentList.innerHTML += `
-    <div class="list-item">
+    <div class="list-item" id="${id}">
         <p>${spentOn}</p>
         <div>
             <p class="amount">${amount}</p>
             <div id="delete-button">
-                <button class="delete">
+                <button class="delete" onclick="RemoveItem(${id})">
                     <img src="./images/delete.png" alt="Delete Button" height="23">
                 </button>
             </div>
         </div>
     </div>`
+
 };
 
 /*
@@ -71,127 +117,37 @@ const AddFunction = () => {
         return;
     }
     else {
-        // Adding new items for amountSpent and spentOn and storing their values.
-        localStorage.setItem(`amountSpent${currentId[currentId.length - 1]}`, `${AmountSpent.value}`);
-        localStorage.setItem(`spentOn${currentId[currentId.length - 1]}`, `${SpentOn.value}`);
+        // Creating new expense object.
+        const expense = {
+            id: Date.now(),
+            amountSpent: AmountSpent.value,
+            spentOn: SpentOn.value
+        }
 
-        // Updating the currentId in local storage.
-        localStorage.setItem('currentId', `${currentId.length}`);
-        
-        // Updating the currentId array by pushing its length in its last index.
-        currentId.push(currentId.length);
-        AddTotal(AmountSpent.value);
-        AddToHistory(AmountSpent.value, SpentOn.value);
+        // Pushing expense in expenseData array.
+        expenseData.push(expense);
+
+        // Updating local storage.
+        localStorage.setItem("expenseData", JSON.stringify(expenseData));
+
+        // Adding total amount and updating it on screen and local storage.
+        totalExpenseAmount = AddTotal(AmountSpent.value);
+        localStorage.setItem("totalExpense", totalExpenseAmount);
+
+        // Adding expense data on list.
+        AddToHistory(AmountSpent.value, SpentOn.value, expense.id);
         AmountSpent.value = '';
         SpentOn.value = '';
-
-        // Displaying clear button.
-        ClearButton.classList.remove('none-display');
     }
 };
 
-/*
-    This function returns the child index inside its parent element.
-*/
-const GetChildIndex = (parent, child) => {
-    // Creating an array of children present inside the parent.
-    let children = Array.from(parent.children);
+// Displaying previous expenseData on screen.
+expenseData.forEach((expense) => {
+    AddToHistory(expense.amountSpent, expense.spentOn, expense.id);
+});
 
-    // Returning the index of child element.
-    return children.indexOf(child);
-}
-
-/*
-    If an item `currentId` is present in local storage then the user must have used this app before.
-    Display the previous added values and total amount.
-*/
-if (localStorage.getItem('currentId')) {
-
-    // Displaying clear button.
-    ClearButton.classList.remove('none-display');
-
-    // Getting currentId from local storage.
-    currentIdValue = localStorage.getItem('currentId');
-
-    // Using for loop to update the currentId array with the numbers/index of amount and spentOn in the localStorage object.
-    for (let i = 0; i <= parseInt(currentIdValue); i++) {
-        currentId[i] = i;
-    }
-
-    // Getting total amount from local storage and updating this amount on screen.
-    const totalAmount = localStorage.getItem('TotalAmount');
-    document.getElementById('total').innerText = totalAmount;
-
-    // Adding previously added items by user.
-    for (let i = 0; i < currentId.length; i++) {
-        AddToHistory(localStorage.getItem(`amountSpent${i}`), localStorage.getItem(`spentOn${i}`));
-    }
-}
+// Displaying totalExpenseAmount.
+AddTotal(totalExpenseAmount);
 
 // Adding event listener to add button to add list item and calculates total
 AddButton.addEventListener('click', AddFunction);
-
-// Adding event listener to clear button to reset the app.
-ClearButton.addEventListener('click', () => {
-
-    // Hiding clear button.
-    ClearButton.classList.add('none-display');
-
-    // Clearing local storage.
-    localStorage.clear();
-
-    // Reloading the page.
-    location.reload();
-})
-
-/*
-    Adding Event Listener to the SpentList.
-    When user clicks on delete button then the list item will be removed form the list and the amount will also be reduced respectively.
-*/
-SpentList.addEventListener('click', (event) => {
-
-    // If the clicked element is delete button  then reduce the amount of the list item from total whose delete button is clicked and remove that list-item.
-    if (event.target.classList.contains('delete') || event.target.parentElement.classList.contains('delete')) {
-
-        // Getting the index of child which is to be removed and storing it in a variable.
-        const RemovingChildIndex = GetChildIndex(SpentList, event.target.closest('.list-item'));
-
-        // Getting the amount which is to be reduced.
-        const ReducedAmount = parseInt(event.target.closest('.list-item').querySelector('.amount').textContent);
-        const TotalAmount = document.getElementById('total');       // Getting total amount element.
-        const CurrentAmount = parseInt(TotalAmount.textContent);    // Getting current amount which is currently displaying on screen.
-        TotalAmount.textContent = CurrentAmount - ReducedAmount;    // Updating the total amount on screen.
-        localStorage.setItem('TotalAmount', `${CurrentAmount - ReducedAmount}`);    // Updating the total amount in local storage.
-
-        // Removing the amountSpent and spentOn values of the element which is to be deleted from local storage.
-        if (RemovingChildIndex === 0) {
-            localStorage.removeItem(`amountSpent${RemovingChildIndex}`);
-            localStorage.removeItem(`spentOn${RemovingChildIndex}`);
-        }
-
-        // Setting the spentOn and amount keys in localStorage object to the previous index from the deleted element index so that the flow of the array does not break.
-        for (let i = RemovingChildIndex; i < currentId.length; i++) {
-
-            const Amount = localStorage.getItem(`amountSpent${i+1}`);
-            const SpentOn = localStorage.getItem(`spentOn${i+1}`);
-
-            if (Amount !== null) {
-                localStorage.setItem(`amountSpent${i}`, `${Amount}`);
-                localStorage.setItem(`spentOn${i}`, `${SpentOn}`);
-            }
-        }
-
-        // Removing the last element from the currentId array.
-        currentId.pop(currentId.length);
-
-        // Removing the last amountSpent and spentOn keys from localStorage since they are the copy of their respective previous keys due to the above for loop.
-        localStorage.removeItem(`amountSpent${currentId.length - 1}`);
-        localStorage.removeItem(`spentOn${currentId.length - 1}`);
-
-        // Updating the currentId in local storage.
-        localStorage.setItem('currentId', `${currentId.length}`);
-
-        // Finally removing the list item element from screen.
-        event.target.closest('.list-item').remove();
-    }
-});
