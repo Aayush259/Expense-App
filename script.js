@@ -82,12 +82,17 @@ const AddTotal = (amount) => {
 */
 const AddToHistory = (amount, spentOn, id) => {
 
+    // Getting clear-button.
+    const ClearBtn = document.getElementById('clear-button');
+
+    // If expenseData length is greater than or equal to 1, then display clear all button, else do not display clear button.
     if (expenseData.length >= 1) {
-        // Getting clear-button.
-        const ClearBtn = document.getElementById('clear-button');
 
         // Displaying Clearn button.
         ClearBtn.classList.remove("none-display");
+    }
+    else {
+        ClearBtn.classList.add("none-display");
     }
 
     // Getting spent list from DOM
