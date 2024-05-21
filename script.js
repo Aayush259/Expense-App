@@ -82,6 +82,14 @@ const AddTotal = (amount) => {
 */
 const AddToHistory = (amount, spentOn, id) => {
 
+    if (expenseData.length === 1) {
+        // Getting clear-button.
+        const ClearBtn = document.getElementById('clear-button');
+
+        // Displaying Clearn button.
+        ClearBtn.classList.remove("none-display");
+    }
+
     // Getting spent list from DOM
     const SpentList = document.querySelector('.spent-list');
 
@@ -139,6 +147,21 @@ const AddFunction = () => {
         AmountSpent.value = '';
         SpentOn.value = '';
     }
+};
+
+// This function clears all the data of the app from local storage and updates the screen.
+const Clear = () => {
+    // Resetting expenseData and totalExpenseAmount.
+    expenseData = [];
+    totalExpenseAmount = 0;
+
+    // Updating local storage.
+    localStorage.setItem("expenseData", JSON.stringify(expenseData));
+    localStorage.setItem("totalExpense", totalExpenseAmount);
+
+    // Updating screen.
+    document.querySelector('.spent-list').innerHTML = "";
+    document.getElementById('total').textContent = 0;
 };
 
 // Displaying previous expenseData on screen.
