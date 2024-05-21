@@ -82,7 +82,7 @@ const AddTotal = (amount) => {
 */
 const AddToHistory = (amount, spentOn, id) => {
 
-    if (expenseData.length === 1) {
+    if (expenseData.length >= 1) {
         // Getting clear-button.
         const ClearBtn = document.getElementById('clear-button');
 
